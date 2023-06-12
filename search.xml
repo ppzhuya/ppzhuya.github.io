@@ -522,4 +522,77 @@
         <tag>-Difficult -Java</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Ubuntu下Tomcat环境配置</title>
+    <url>/2023/06/12/Ubuntu%E4%B8%8BTomcat%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="Ubuntu下Tomcat环境配置"><a href="#Ubuntu下Tomcat环境配置" class="headerlink" title="Ubuntu下Tomcat环境配置"></a>Ubuntu下Tomcat环境配置</h1><h2 id="首先安装java环境"><a href="#首先安装java环境" class="headerlink" title="首先安装java环境"></a>首先安装java环境</h2><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt install openjdk-17-jdk</span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>安装完成后，运行命令Java –version检查是否安装正确。命令将会打印Java的版本</p>
+<p>成功安装会显示以下内容：</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">java -version</span><br><span class="line">openjdk version <span class="string">&quot;17.0.7&quot;</span> 2023-04-18</span><br><span class="line">OpenJDK Runtime Environment (build 17.0.7+7-Ubuntu-0ubuntu122.04.2)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 17.0.7+7-Ubuntu-0ubuntu122.04.2, mixed mode, sharing)</span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>以root运行Tomcat，具有安全风险。我们将创建普通<a class="link"   href="https://www.myfreax.com/how-to-create-users-in-linux-using-the-useradd-command/" >用户 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>运行Tomcat，配并将Tomcat用户的家目录设置为<code>/opt/tomcat</code>。</p>
+<p>运行useradd命令<code>sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat</code></p>
+<h2 id="下载tomcat并解压"><a href="#下载tomcat并解压" class="headerlink" title="下载tomcat并解压"></a>下载tomcat并解压</h2><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">VERSION=10.1.9</span><br><span class="line"></span><br><span class="line">wget https://dlcdn.apache.org/tomcat/tomcat-10/v<span class="variable">$&#123;VERSION&#125;</span>/bin/apache-tomcat-<span class="variable">$&#123;VERSION&#125;</span>.tar.gz -P /tmp</span><br><span class="line"></span><br><span class="line">sudo tar -xf /tmp/apache-tomcat-<span class="variable">$&#123;VERSION&#125;</span>.tar.gz -C /opt/tomcat/</span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>Tomcat会定期进行更新。为了更好地控制版本和更新，我们将创建一个名为<code>latest</code>的<a class="link"   href="https://www.myfreax.com/how-to-create-symbolic-links-in-linux-using-the-ln-command/" >符号链接 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，该链接指向Tomcat的安装目录。</p>
+<p>运行<a class="link"   href="https://www.myfreax.com/chmod-command-in-linux/" >chmod命令 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>使<code>bin</code>目录中的shell脚本具有可执行权限，这些脚本用于启动和停止Tomcat。</p>
+<p>将&#x2F;opt&#x2F;tomcat目录的所有权更改为tomcat用户和tomcat组，使tomcat用户可以访问 &#x2F;opt&#x2F;tomcat目录。运行命令<code>sudo chown -R tomcat: /opt/tomcat</code>。</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">ln</span> -s /opt/tomcat/apache-tomcat-<span class="variable">$&#123;VERSION&#125;</span> /opt/tomcat/latest</span><br><span class="line"></span><br><span class="line">sudo sh -c <span class="string">&#x27;chmod +x /opt/tomcat/latest/bin/*.sh&#x27;</span></span><br><span class="line">sudo <span class="built_in">chown</span> -R tomcat: /opt/tomcat</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+<h2 id="创建systemed服务单元"><a href="#创建systemed服务单元" class="headerlink" title="创建systemed服务单元"></a>创建systemed服务单元</h2><p>我们将其设置为服务运行，而不是手动启动和停止Tomcat服务器。</p>
+<p>打开您喜欢的<a class="link"   href="https://www.myfreax.com/tag/vim/" >文本编辑器 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，创建文件tomcat.service在&#x2F;etc&#x2F;systemd&#x2F;system&#x2F;目录。在本教程中我们将使用<a class="link"   href="https://www.myfreax.com/the-basis-of-the-linux-vim-command/" >vim创建文件 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+<p>完成后，<a class="link"   href="https://www.myfreax.com/how-to-save-file-in-vim-quit-editor/" >保存文件并退出vim <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。然后运行<code>systemctl daemon-reload</code>命令重新加载配置文件。</p>
+<p>运行命令<code>sudo systemctl enable --now tomcat</code>启动Tomcat服务并自动启动。<code>systemctl restart tomcat</code>命令重启tomcat服务。</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/systemd/system/tomcat.service</span><br></pre></td></tr></table></figure></div>
+
+<p>输入以下内容</p>
+<div class="highlight-container" data-rel="Ini"><figure class="iseeu highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Tomcat <span class="number">9</span> servlet container</span><br><span class="line"><span class="attr">After</span>=network.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"></span><br><span class="line"><span class="attr">User</span>=tomcat</span><br><span class="line"><span class="attr">Group</span>=tomcat</span><br><span class="line"></span><br><span class="line"><span class="attr">Environment</span>=<span class="string">&quot;JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64&quot;</span></span><br><span class="line"><span class="attr">Environment</span>=<span class="string">&quot;JAVA_OPTS=-Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Environment</span>=<span class="string">&quot;CATALINA_BASE=/opt/tomcat/latest&quot;</span></span><br><span class="line"><span class="attr">Environment</span>=<span class="string">&quot;CATALINA_HOME=/opt/tomcat/latest&quot;</span></span><br><span class="line"><span class="attr">Environment</span>=<span class="string">&quot;CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid&quot;</span></span><br><span class="line"><span class="attr">Environment</span>=<span class="string">&quot;CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">ExecStart</span>=/opt/tomcat/latest/bin/startup.sh</span><br><span class="line"><span class="attr">ExecStop</span>=/opt/tomcat/latest/bin/shutdown.sh</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+<p>启动</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> --now tomcat</span><br><span class="line">sudo systemctl restart tomcat</span><br><span class="line">sudo systemctl status tomcat</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+<h2 id="配置防火墙"><a href="#配置防火墙" class="headerlink" title="配置防火墙"></a>配置防火墙</h2><div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw allow 8080/tcp</span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>至此，您应该能够使用Web浏览器访问Tomcat。由于我们尚未创建用户，因此无法访问Tomcat管理界面。</p>
+<p>我们可以在<code>tomcat-users.xml</code>文件中定义Tomcat用户和角色。继续使用vim编辑文件tomcat-users.xml。</p>
+<p>创建tomcat Web用户manager-gui和admin-gui，如下所示。确保密码更改为更安全的密码。</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">sudo vim /opt/tomcat/latest/conf/tomcat-users.xml</span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>只要复制users里面的三行就可以了</p>
+<div class="highlight-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tomcat-users</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    Comments</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">role</span> <span class="attr">rolename</span>=<span class="string">&quot;admin-gui&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">role</span> <span class="attr">rolename</span>=<span class="string">&quot;manager-gui&quot;</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">user</span> <span class="attr">username</span>=<span class="string">&quot;admin&quot;</span> <span class="attr">password</span>=<span class="string">&quot;admin_password&quot;</span> <span class="attr">roles</span>=<span class="string">&quot;admin-gui,manager-gui&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tomcat-users</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h2 id="测试安装"><a href="#测试安装" class="headerlink" title="测试安装"></a>测试安装</h2><p>可以打开URL <code>http://&lt;your_domain_or_IP_address&gt;:8080/manager/html</code>找到它。</p>
+]]></content>
+      <categories>
+        <category>-Learning</category>
+      </categories>
+      <tags>
+        <tag>-Difficult -Java</tag>
+      </tags>
+  </entry>
 </search>
