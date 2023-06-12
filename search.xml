@@ -595,4 +595,1494 @@
         <tag>-Difficult -Java</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Http协议相关知识点</title>
+    <url>/2023/06/12/Http%E5%8D%8F%E8%AE%AE/</url>
+    <content><![CDATA[<h1 id="HTTP-x2F-HTTPS-简介"><a href="#HTTP-x2F-HTTPS-简介" class="headerlink" title="HTTP&#x2F;HTTPS 简介"></a>HTTP&#x2F;HTTPS 简介</h1><p>（摘自菜鸟教程）</p>
+<p>HTTP 协议是 Hyper Text Transfer Protocol（超文本传输协议）的缩写，是用于从万维网（ WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。</p>
+<p>HTTP 是一个基于 TCP&#x2F;IP 通信协议来传递数据（HTML 文件、图片文件、查询结果等）。</p>
+<p>HTTPS 协议是 HyperText Transfer Protocol Secure（超文本传输安全协议）的缩写，是一种通过计算机网络进行安全通信的传输协议。</p>
+<p>HTTPS 经由 HTTP 进行通信，但利用 SSL&#x2F;TLS 来加密数据包，HTTPS 开发的主要目的，是提供对网站服务器的身份认证，保护交换资料的隐私与完整性。</p>
+<p>HTTP 的 URL 是由 <strong>http:&#x2F;&#x2F;</strong> 起始与默认使用端口 <strong>80</strong>，而 HTTPS 的 URL 则是由 <strong>https:&#x2F;&#x2F;</strong> 起始与默认使用端口<strong>443</strong>。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://www.runoob.com/wp-content/uploads/2013/11/1_5J6ULfBAvgLF8PBM4B__Qw.jpeg"
+                      alt="img"
+                ></p>
+<h1 id="HTTP-请求方法"><a href="#HTTP-请求方法" class="headerlink" title="HTTP 请求方法"></a>HTTP 请求方法</h1><p>根据 HTTP 标准，HTTP 请求可以使用多种请求方法。</p>
+<p>HTTP1.0 定义了三种请求方法： GET, POST 和 HEAD 方法。</p>
+<p>HTTP1.1 新增了六种请求方法：OPTIONS、PUT、PATCH、DELETE、TRACE 和 CONNECT 方法。</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">方法</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">GET</td>
+<td align="left">请求指定的页面信息，并返回实体主体。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">HEAD</td>
+<td align="left">类似于 GET 请求，只不过返回的响应中没有具体的内容，用于获取报头</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">POST</td>
+<td align="left">向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST 请求可能会导致新的资源的建立和&#x2F;或已有资源的修改。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">PUT</td>
+<td align="left">从客户端向服务器传送的数据取代指定的文档的内容。</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">DELETE</td>
+<td align="left">请求服务器删除指定的页面。</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">CONNECT</td>
+<td align="left">HTTP&#x2F;1.1 协议中预留给能够将连接改为管道方式的代理服务器。</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">OPTIONS</td>
+<td align="left">允许客户端查看服务器的性能。</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">TRACE</td>
+<td align="left">回显服务器收到的请求，主要用于测试或诊断。</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">PATCH</td>
+<td align="left">是对 PUT 方法的补充，用来对已知资源进行局部更新 。</td>
+</tr>
+</tbody></table>
+<h1 id="HTTP-响应头信息"><a href="#HTTP-响应头信息" class="headerlink" title="HTTP 响应头信息"></a>HTTP 响应头信息</h1><p>HTTP请求头提供了关于请求，响应或者其他的发送实体的信息。</p>
+<p>在本章节中我们将具体来介绍HTTP响应头信息。</p>
+<table>
+<thead>
+<tr>
+<th align="left">应答头</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Allow</td>
+<td align="left">服务器支持哪些请求方法（如GET、POST等）。</td>
+</tr>
+<tr>
+<td align="left">Content-Encoding</td>
+<td align="left">文档的编码（Encode）方法。只有在解码之后才可以得到Content-Type头指定的内容类型。利用gzip压缩文档能够显著地减少HTML文档的下载时间。Java的GZIPOutputStream可以很方便地进行gzip压缩，但只有Unix上的Netscape和Windows上的IE 4、IE 5才支持它。因此，Servlet应该通过查看Accept-Encoding头（即request.getHeader(“Accept-Encoding”)）检查浏览器是否支持gzip，为支持gzip的浏览器返回经gzip压缩的HTML页面，为其他浏览器返回普通页面。</td>
+</tr>
+<tr>
+<td align="left">Content-Length</td>
+<td align="left">表示内容长度。只有当浏览器使用持久HTTP连接时才需要这个数据。如果你想要利用持久连接的优势，可以把输出文档写入 ByteArrayOutputStream，完成后查看其大小，然后把该值放入Content-Length头，最后通过byteArrayStream.writeTo(response.getOutputStream()发送内容。</td>
+</tr>
+<tr>
+<td align="left">Content-Type</td>
+<td align="left">表示后面的文档属于什么MIME类型。Servlet默认为text&#x2F;plain，但通常需要显式地指定为text&#x2F;html。由于经常要设置Content-Type，因此HttpServletResponse提供了一个专用的方法setContentType。</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">当前的GMT时间。你可以用setDateHeader来设置这个头以避免转换时间格式的麻烦。</td>
+</tr>
+<tr>
+<td align="left">Expires</td>
+<td align="left">应该在什么时候认为文档已经过期，从而不再缓存它？</td>
+</tr>
+<tr>
+<td align="left">Last-Modified</td>
+<td align="left">文档的最后改动时间。客户可以通过If-Modified-Since请求头提供一个日期，该请求将被视为一个条件GET，只有改动时间迟于指定时间的文档才会返回，否则返回一个304（Not Modified）状态。Last-Modified也可用setDateHeader方法来设置。</td>
+</tr>
+<tr>
+<td align="left">Location</td>
+<td align="left">表示客户应当到哪里去提取文档。Location通常不是直接设置的，而是通过HttpServletResponse的sendRedirect方法，该方法同时设置状态代码为302。</td>
+</tr>
+<tr>
+<td align="left">Refresh</td>
+<td align="left">表示浏览器应该在多少时间之后刷新文档，以秒计。除了刷新当前文档之外，你还可以通过setHeader(“Refresh”, “5; URL&#x3D;<a class="link"   href="http://host/path%22)%E8%AE%A9%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AF%BB%E5%8F%96%E6%8C%87%E5%AE%9A%E7%9A%84%E9%A1%B5%E9%9D%A2%E3%80%82" >http://host/path&quot;)让浏览器读取指定的页面。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 注意这种功能通常是通过设置HTML页面HEAD区的＜META HTTP-EQUIV&#x3D;”Refresh” CONTENT&#x3D;”5;URL&#x3D;<a class="link"   href="http://host/path%22%EF%BC%9E%E5%AE%9E%E7%8E%B0%EF%BC%8C%E8%BF%99%E6%98%AF%E5%9B%A0%E4%B8%BA%EF%BC%8C%E8%87%AA%E5%8A%A8%E5%88%B7%E6%96%B0%E6%88%96%E9%87%8D%E5%AE%9A%E5%90%91%E5%AF%B9%E4%BA%8E%E9%82%A3%E4%BA%9B%E4%B8%8D%E8%83%BD%E4%BD%BF%E7%94%A8CGI%E6%88%96Servlet%E7%9A%84HTML%E7%BC%96%E5%86%99%E8%80%85%E5%8D%81%E5%88%86%E9%87%8D%E8%A6%81%E3%80%82%E4%BD%86%E6%98%AF%EF%BC%8C%E5%AF%B9%E4%BA%8EServlet%E6%9D%A5%E8%AF%B4%EF%BC%8C%E7%9B%B4%E6%8E%A5%E8%AE%BE%E7%BD%AERefresh%E5%A4%B4%E6%9B%B4%E5%8A%A0%E6%96%B9%E4%BE%BF%E3%80%82" >http://host/path&quot;＞实现，这是因为，自动刷新或重定向对于那些不能使用CGI或Servlet的HTML编写者十分重要。但是，对于Servlet来说，直接设置Refresh头更加方便。 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>  注意Refresh的意义是”N秒之后刷新本页面或访问指定页面”，而不是”每隔N秒刷新本页面或访问指定页面”。因此，连续刷新要求每次都发送一个Refresh头，而发送204状态代码则可以阻止浏览器继续刷新，不管是使用Refresh头还是＜META HTTP-EQUIV&#x3D;”Refresh” …＞。  注意Refresh头不属于HTTP 1.1正式规范的一部分，而是一个扩展，但Netscape和IE都支持它。</td>
+</tr>
+<tr>
+<td align="left">Server</td>
+<td align="left">服务器名字。Servlet一般不设置这个值，而是由Web服务器自己设置。</td>
+</tr>
+<tr>
+<td align="left">Set-Cookie</td>
+<td align="left">设置和页面关联的Cookie。Servlet不应使用response.setHeader(“Set-Cookie”, …)，而是应使用HttpServletResponse提供的专用方法addCookie。参见下文有关Cookie设置的讨论。</td>
+</tr>
+<tr>
+<td align="left">WWW-Authenticate</td>
+<td align="left">客户应该在Authorization头中提供什么类型的授权信息？在包含401（Unauthorized）状态行的应答中这个头是必需的。例如，response.setHeader(“WWW-Authenticate”, “BASIC realm&#x3D;＼”executives＼””)。 注意Servlet一般不进行这方面的处理，而是让Web服务器的专门机制来控制受密码保护页面的访问（例如.htaccess）。</td>
+</tr>
+</tbody></table>
+<h1 id="HTTP-状态码"><a href="#HTTP-状态码" class="headerlink" title="HTTP 状态码"></a>HTTP 状态码</h1><p>当浏览者访问一个网页时，浏览者的浏览器会向网页所在服务器发出请求。当浏览器接收并显示网页前，此网页所在的服务器会返回一个包含 HTTP 状态码的信息头（server header）用以响应浏览器的请求。</p>
+<p>HTTP 状态码的英文为 <strong>HTTP Status Code</strong>。。</p>
+<p>下面是常见的 HTTP 状态码：</p>
+<ul>
+<li>200 - 请求成功</li>
+<li>301 - 资源（网页等）被永久转移到其它URL</li>
+<li>404 - 请求的资源（网页等）不存在</li>
+<li>500 - 内部服务器错误</li>
+</ul>
+<h2 id="HTTP-状态码分类"><a href="#HTTP-状态码分类" class="headerlink" title="HTTP 状态码分类"></a>HTTP 状态码分类</h2><p>HTTP 状态码由三个十进制数字组成，第一个十进制数字定义了状态码的类型。响应分为五类：信息响应(100–199)，成功响应(200–299)，重定向(300–399)，客户端错误(400–499)和服务器错误 (500–599)：</p>
+<table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">分类描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1**</td>
+<td align="left">信息，服务器收到请求，需要请求者继续执行操作</td>
+</tr>
+<tr>
+<td align="left">2**</td>
+<td align="left">成功，操作被成功接收并处理</td>
+</tr>
+<tr>
+<td align="left">3**</td>
+<td align="left">重定向，需要进一步的操作以完成请求</td>
+</tr>
+<tr>
+<td align="left">4**</td>
+<td align="left">客户端错误，请求包含语法错误或无法完成请求</td>
+</tr>
+<tr>
+<td align="left">5**</td>
+<td align="left">服务器错误，服务器在处理请求的过程中发生了错误</td>
+</tr>
+</tbody></table>
+<p>HTTP状态码列表:</p>
+<table>
+<thead>
+<tr>
+<th align="left">状态码</th>
+<th align="left">状态码英文名称</th>
+<th align="left">中文描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">100</td>
+<td align="left">Continue</td>
+<td align="left">继续。客户端应继续其请求</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="left">Switching Protocols</td>
+<td align="left">切换协议。服务器根据客户端的请求切换协议。只能切换到更高级的协议，例如，切换到HTTP的新版本协议</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">200</td>
+<td align="left">OK</td>
+<td align="left">请求成功。一般用于GET与POST请求</td>
+</tr>
+<tr>
+<td align="left">201</td>
+<td align="left">Created</td>
+<td align="left">已创建。成功请求并创建了新的资源</td>
+</tr>
+<tr>
+<td align="left">202</td>
+<td align="left">Accepted</td>
+<td align="left">已接受。已经接受请求，但未处理完成</td>
+</tr>
+<tr>
+<td align="left">203</td>
+<td align="left">Non-Authoritative Information</td>
+<td align="left">非授权信息。请求成功。但返回的meta信息不在原始的服务器，而是一个副本</td>
+</tr>
+<tr>
+<td align="left">204</td>
+<td align="left">No Content</td>
+<td align="left">无内容。服务器成功处理，但未返回内容。在未更新网页的情况下，可确保浏览器继续显示当前文档</td>
+</tr>
+<tr>
+<td align="left">205</td>
+<td align="left">Reset Content</td>
+<td align="left">重置内容。服务器处理成功，用户终端（例如：浏览器）应重置文档视图。可通过此返回码清除浏览器的表单域</td>
+</tr>
+<tr>
+<td align="left">206</td>
+<td align="left">Partial Content</td>
+<td align="left">部分内容。服务器成功处理了部分GET请求</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">300</td>
+<td align="left">Multiple Choices</td>
+<td align="left">多种选择。请求的资源可包括多个位置，相应可返回一个资源特征与地址的列表用于用户终端（例如：浏览器）选择</td>
+</tr>
+<tr>
+<td align="left">301</td>
+<td align="left">Moved Permanently</td>
+<td align="left">永久移动。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替</td>
+</tr>
+<tr>
+<td align="left">302</td>
+<td align="left">Found</td>
+<td align="left">临时移动。与301类似。但资源只是临时被移动。客户端应继续使用原有URI</td>
+</tr>
+<tr>
+<td align="left">303</td>
+<td align="left">See Other</td>
+<td align="left">查看其它地址。与301类似。使用GET和POST请求查看</td>
+</tr>
+<tr>
+<td align="left">304</td>
+<td align="left">Not Modified</td>
+<td align="left">未修改。所请求的资源未修改，服务器返回此状态码时，不会返回任何资源。客户端通常会缓存访问过的资源，通过提供一个头信息指出客户端希望只返回在指定日期之后修改的资源</td>
+</tr>
+<tr>
+<td align="left">305</td>
+<td align="left">Use Proxy</td>
+<td align="left">使用代理。所请求的资源必须通过代理访问</td>
+</tr>
+<tr>
+<td align="left">306</td>
+<td align="left">Unused</td>
+<td align="left">已经被废弃的HTTP状态码</td>
+</tr>
+<tr>
+<td align="left">307</td>
+<td align="left">Temporary Redirect</td>
+<td align="left">临时重定向。与302类似。使用GET请求重定向</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">400</td>
+<td align="left">Bad Request</td>
+<td align="left">客户端请求的语法错误，服务器无法理解</td>
+</tr>
+<tr>
+<td align="left">401</td>
+<td align="left">Unauthorized</td>
+<td align="left">请求要求用户的身份认证</td>
+</tr>
+<tr>
+<td align="left">402</td>
+<td align="left">Payment Required</td>
+<td align="left">保留，将来使用</td>
+</tr>
+<tr>
+<td align="left">403</td>
+<td align="left">Forbidden</td>
+<td align="left">服务器理解请求客户端的请求，但是拒绝执行此请求</td>
+</tr>
+<tr>
+<td align="left">404</td>
+<td align="left">Not Found</td>
+<td align="left">服务器无法根据客户端的请求找到资源（网页）。通过此代码，网站设计人员可设置”您所请求的资源无法找到”的个性页面</td>
+</tr>
+<tr>
+<td align="left">405</td>
+<td align="left">Method Not Allowed</td>
+<td align="left">客户端请求中的方法被禁止</td>
+</tr>
+<tr>
+<td align="left">406</td>
+<td align="left">Not Acceptable</td>
+<td align="left">服务器无法根据客户端请求的内容特性完成请求</td>
+</tr>
+<tr>
+<td align="left">407</td>
+<td align="left">Proxy Authentication Required</td>
+<td align="left">请求要求代理的身份认证，与401类似，但请求者应当使用代理进行授权</td>
+</tr>
+<tr>
+<td align="left">408</td>
+<td align="left">Request Time-out</td>
+<td align="left">服务器等待客户端发送的请求时间过长，超时</td>
+</tr>
+<tr>
+<td align="left">409</td>
+<td align="left">Conflict</td>
+<td align="left">服务器完成客户端的 PUT 请求时可能返回此代码，服务器处理请求时发生了冲突</td>
+</tr>
+<tr>
+<td align="left">410</td>
+<td align="left">Gone</td>
+<td align="left">客户端请求的资源已经不存在。410不同于404，如果资源以前有现在被永久删除了可使用410代码，网站设计人员可通过301代码指定资源的新位置</td>
+</tr>
+<tr>
+<td align="left">411</td>
+<td align="left">Length Required</td>
+<td align="left">服务器无法处理客户端发送的不带Content-Length的请求信息</td>
+</tr>
+<tr>
+<td align="left">412</td>
+<td align="left">Precondition Failed</td>
+<td align="left">客户端请求信息的先决条件错误</td>
+</tr>
+<tr>
+<td align="left">413</td>
+<td align="left">Request Entity Too Large</td>
+<td align="left">由于请求的实体过大，服务器无法处理，因此拒绝请求。为防止客户端的连续请求，服务器可能会关闭连接。如果只是服务器暂时无法处理，则会包含一个Retry-After的响应信息</td>
+</tr>
+<tr>
+<td align="left">414</td>
+<td align="left">Request-URI Too Large</td>
+<td align="left">请求的URI过长（URI通常为网址），服务器无法处理</td>
+</tr>
+<tr>
+<td align="left">415</td>
+<td align="left">Unsupported Media Type</td>
+<td align="left">服务器无法处理请求附带的媒体格式</td>
+</tr>
+<tr>
+<td align="left">416</td>
+<td align="left">Requested range not satisfiable</td>
+<td align="left">客户端请求的范围无效</td>
+</tr>
+<tr>
+<td align="left">417</td>
+<td align="left">Expectation Failed</td>
+<td align="left">服务器无法满足Expect的请求头信息</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">500</td>
+<td align="left">Internal Server Error</td>
+<td align="left">服务器内部错误，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">501</td>
+<td align="left">Not Implemented</td>
+<td align="left">服务器不支持请求的功能，无法完成请求</td>
+</tr>
+<tr>
+<td align="left">502</td>
+<td align="left">Bad Gateway</td>
+<td align="left">作为网关或者代理工作的服务器尝试执行请求时，从远程服务器接收到了一个无效的响应</td>
+</tr>
+<tr>
+<td align="left">503</td>
+<td align="left">Service Unavailable</td>
+<td align="left">由于超载或系统维护，服务器暂时的无法处理客户端的请求。延时的长度可包含在服务器的Retry-After头信息中</td>
+</tr>
+<tr>
+<td align="left">504</td>
+<td align="left">Gateway Time-out</td>
+<td align="left">充当网关或代理的服务器，未及时从远端服务器获取请求</td>
+</tr>
+<tr>
+<td align="left">505</td>
+<td align="left">HTTP Version not supported</td>
+<td align="left">服务器不支持请求的HTTP协议的版本，无法完成处理</td>
+</tr>
+</tbody></table>
+<h1 id="HTTP-content-type"><a href="#HTTP-content-type" class="headerlink" title="HTTP content-type"></a>HTTP content-type</h1><p>Content-Type（内容类型），一般是指网页中存在的 Content-Type，用于定义网络文件的类型和网页的编码，决定浏览器将以什么形式、什么编码读取这个文件，这就是经常看到一些 PHP 网页点击的结果却是下载一个文件或一张图片的原因。</p>
+<p>Content-Type 标头告诉客户端实际返回的内容的内容类型。</p>
+<p>语法格式：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Type: text/html; charset=utf-8</span><br><span class="line">Content-Type: multipart/form-data; boundary=something</span><br></pre></td></tr></table></figure></div>
+
+<p>实例：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://www.runoob.com/wp-content/uploads/2014/06/F7E193D6-3C08-4B97-BAF2-FF340DAA5C6E.jpg"
+                      alt="img"
+                ></p>
+<p>常见的媒体格式类型如下：</p>
+<ul>
+<li>text&#x2F;html ： HTML格式</li>
+<li>text&#x2F;plain ：纯文本格式</li>
+<li>text&#x2F;xml ： XML格式</li>
+<li>image&#x2F;gif ：gif图片格式</li>
+<li>image&#x2F;jpeg ：jpg图片格式</li>
+<li>image&#x2F;png：png图片格式</li>
+</ul>
+<p>以application开头的媒体格式类型：</p>
+<ul>
+<li>application&#x2F;xhtml+xml ：XHTML格式</li>
+<li>application&#x2F;xml： XML数据格式</li>
+<li>application&#x2F;atom+xml ：Atom XML聚合格式</li>
+<li>application&#x2F;json： JSON数据格式</li>
+<li>application&#x2F;pdf：pdf格式</li>
+<li>application&#x2F;msword ： Word文档格式</li>
+<li>application&#x2F;octet-stream ： 二进制流数据（如常见的文件下载）</li>
+<li>application&#x2F;x-www-form-urlencoded ： <form encType=””>中默认的encType，form表单数据被编码为key&#x2F;value格式发送到服务器（表单默认的提交数据的格式）</li>
+</ul>
+<p>另外一种常见的媒体格式是上传文件之时使用的：</p>
+<ul>
+<li>multipart&#x2F;form-data ： 需要在表单中进行文件上传时，就需要使用该格式</li>
+</ul>
+<hr>
+<h2 id="HTTP-content-type-对照表"><a href="#HTTP-content-type-对照表" class="headerlink" title="HTTP content-type 对照表"></a>HTTP content-type 对照表</h2><table>
+<thead>
+<tr>
+<th align="left">文件扩展名</th>
+<th align="left">Content-Type(Mime-Type)</th>
+<th align="left">文件扩展名</th>
+<th align="left">Content-Type(Mime-Type)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">.*（ 二进制流，不知道下载文件类型）</td>
+<td align="left">application&#x2F;octet-stream</td>
+<td align="left">.tif</td>
+<td align="left">image&#x2F;tiff</td>
+</tr>
+<tr>
+<td align="left">.001</td>
+<td align="left">application&#x2F;x-001</td>
+<td align="left">.301</td>
+<td align="left">application&#x2F;x-301</td>
+</tr>
+<tr>
+<td align="left">.323</td>
+<td align="left">text&#x2F;h323</td>
+<td align="left">.906</td>
+<td align="left">application&#x2F;x-906</td>
+</tr>
+<tr>
+<td align="left">.907</td>
+<td align="left">drawing&#x2F;907</td>
+<td align="left">.a11</td>
+<td align="left">application&#x2F;x-a11</td>
+</tr>
+<tr>
+<td align="left">.acp</td>
+<td align="left">audio&#x2F;x-mei-aac</td>
+<td align="left">.ai</td>
+<td align="left">application&#x2F;postscript</td>
+</tr>
+<tr>
+<td align="left">.aif</td>
+<td align="left">audio&#x2F;aiff</td>
+<td align="left">.aifc</td>
+<td align="left">audio&#x2F;aiff</td>
+</tr>
+<tr>
+<td align="left">.aiff</td>
+<td align="left">audio&#x2F;aiff</td>
+<td align="left">.anv</td>
+<td align="left">application&#x2F;x-anv</td>
+</tr>
+<tr>
+<td align="left">.asa</td>
+<td align="left">text&#x2F;asa</td>
+<td align="left">.asf</td>
+<td align="left">video&#x2F;x-ms-asf</td>
+</tr>
+<tr>
+<td align="left">.asp</td>
+<td align="left">text&#x2F;asp</td>
+<td align="left">.asx</td>
+<td align="left">video&#x2F;x-ms-asf</td>
+</tr>
+<tr>
+<td align="left">.au</td>
+<td align="left">audio&#x2F;basic</td>
+<td align="left">.avi</td>
+<td align="left">video&#x2F;avi</td>
+</tr>
+<tr>
+<td align="left">.awf</td>
+<td align="left">application&#x2F;vnd.adobe.workflow</td>
+<td align="left">.biz</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.bmp</td>
+<td align="left">application&#x2F;x-bmp</td>
+<td align="left">.bot</td>
+<td align="left">application&#x2F;x-bot</td>
+</tr>
+<tr>
+<td align="left">.c4t</td>
+<td align="left">application&#x2F;x-c4t</td>
+<td align="left">.c90</td>
+<td align="left">application&#x2F;x-c90</td>
+</tr>
+<tr>
+<td align="left">.cal</td>
+<td align="left">application&#x2F;x-cals</td>
+<td align="left">.cat</td>
+<td align="left">application&#x2F;vnd.ms-pki.seccat</td>
+</tr>
+<tr>
+<td align="left">.cdf</td>
+<td align="left">application&#x2F;x-netcdf</td>
+<td align="left">.cdr</td>
+<td align="left">application&#x2F;x-cdr</td>
+</tr>
+<tr>
+<td align="left">.cel</td>
+<td align="left">application&#x2F;x-cel</td>
+<td align="left">.cer</td>
+<td align="left">application&#x2F;x-x509-ca-cert</td>
+</tr>
+<tr>
+<td align="left">.cg4</td>
+<td align="left">application&#x2F;x-g4</td>
+<td align="left">.cgm</td>
+<td align="left">application&#x2F;x-cgm</td>
+</tr>
+<tr>
+<td align="left">.cit</td>
+<td align="left">application&#x2F;x-cit</td>
+<td align="left">.class</td>
+<td align="left">java&#x2F;*</td>
+</tr>
+<tr>
+<td align="left">.cml</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.cmp</td>
+<td align="left">application&#x2F;x-cmp</td>
+</tr>
+<tr>
+<td align="left">.cmx</td>
+<td align="left">application&#x2F;x-cmx</td>
+<td align="left">.cot</td>
+<td align="left">application&#x2F;x-cot</td>
+</tr>
+<tr>
+<td align="left">.crl</td>
+<td align="left">application&#x2F;pkix-crl</td>
+<td align="left">.crt</td>
+<td align="left">application&#x2F;x-x509-ca-cert</td>
+</tr>
+<tr>
+<td align="left">.csi</td>
+<td align="left">application&#x2F;x-csi</td>
+<td align="left">.css</td>
+<td align="left">text&#x2F;css</td>
+</tr>
+<tr>
+<td align="left">.cut</td>
+<td align="left">application&#x2F;x-cut</td>
+<td align="left">.dbf</td>
+<td align="left">application&#x2F;x-dbf</td>
+</tr>
+<tr>
+<td align="left">.dbm</td>
+<td align="left">application&#x2F;x-dbm</td>
+<td align="left">.dbx</td>
+<td align="left">application&#x2F;x-dbx</td>
+</tr>
+<tr>
+<td align="left">.dcd</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.dcx</td>
+<td align="left">application&#x2F;x-dcx</td>
+</tr>
+<tr>
+<td align="left">.der</td>
+<td align="left">application&#x2F;x-x509-ca-cert</td>
+<td align="left">.dgn</td>
+<td align="left">application&#x2F;x-dgn</td>
+</tr>
+<tr>
+<td align="left">.dib</td>
+<td align="left">application&#x2F;x-dib</td>
+<td align="left">.dll</td>
+<td align="left">application&#x2F;x-msdownload</td>
+</tr>
+<tr>
+<td align="left">.doc</td>
+<td align="left">application&#x2F;msword</td>
+<td align="left">.dot</td>
+<td align="left">application&#x2F;msword</td>
+</tr>
+<tr>
+<td align="left">.drw</td>
+<td align="left">application&#x2F;x-drw</td>
+<td align="left">.dtd</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.dwf</td>
+<td align="left">Model&#x2F;vnd.dwf</td>
+<td align="left">.dwf</td>
+<td align="left">application&#x2F;x-dwf</td>
+</tr>
+<tr>
+<td align="left">.dwg</td>
+<td align="left">application&#x2F;x-dwg</td>
+<td align="left">.dxb</td>
+<td align="left">application&#x2F;x-dxb</td>
+</tr>
+<tr>
+<td align="left">.dxf</td>
+<td align="left">application&#x2F;x-dxf</td>
+<td align="left">.edn</td>
+<td align="left">application&#x2F;vnd.adobe.edn</td>
+</tr>
+<tr>
+<td align="left">.emf</td>
+<td align="left">application&#x2F;x-emf</td>
+<td align="left">.eml</td>
+<td align="left">message&#x2F;rfc822</td>
+</tr>
+<tr>
+<td align="left">.ent</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.epi</td>
+<td align="left">application&#x2F;x-epi</td>
+</tr>
+<tr>
+<td align="left">.eps</td>
+<td align="left">application&#x2F;x-ps</td>
+<td align="left">.eps</td>
+<td align="left">application&#x2F;postscript</td>
+</tr>
+<tr>
+<td align="left">.etd</td>
+<td align="left">application&#x2F;x-ebx</td>
+<td align="left">.exe</td>
+<td align="left">application&#x2F;x-msdownload</td>
+</tr>
+<tr>
+<td align="left">.fax</td>
+<td align="left">image&#x2F;fax</td>
+<td align="left">.fdf</td>
+<td align="left">application&#x2F;vnd.fdf</td>
+</tr>
+<tr>
+<td align="left">.fif</td>
+<td align="left">application&#x2F;fractals</td>
+<td align="left">.fo</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.frm</td>
+<td align="left">application&#x2F;x-frm</td>
+<td align="left">.g4</td>
+<td align="left">application&#x2F;x-g4</td>
+</tr>
+<tr>
+<td align="left">.gbr</td>
+<td align="left">application&#x2F;x-gbr</td>
+<td align="left">.</td>
+<td align="left">application&#x2F;x-</td>
+</tr>
+<tr>
+<td align="left">.gif</td>
+<td align="left">image&#x2F;gif</td>
+<td align="left">.gl2</td>
+<td align="left">application&#x2F;x-gl2</td>
+</tr>
+<tr>
+<td align="left">.gp4</td>
+<td align="left">application&#x2F;x-gp4</td>
+<td align="left">.hgl</td>
+<td align="left">application&#x2F;x-hgl</td>
+</tr>
+<tr>
+<td align="left">.hmr</td>
+<td align="left">application&#x2F;x-hmr</td>
+<td align="left">.hpg</td>
+<td align="left">application&#x2F;x-hpgl</td>
+</tr>
+<tr>
+<td align="left">.hpl</td>
+<td align="left">application&#x2F;x-hpl</td>
+<td align="left">.hqx</td>
+<td align="left">application&#x2F;mac-binhex40</td>
+</tr>
+<tr>
+<td align="left">.hrf</td>
+<td align="left">application&#x2F;x-hrf</td>
+<td align="left">.hta</td>
+<td align="left">application&#x2F;hta</td>
+</tr>
+<tr>
+<td align="left">.htc</td>
+<td align="left">text&#x2F;x-component</td>
+<td align="left">.htm</td>
+<td align="left">text&#x2F;html</td>
+</tr>
+<tr>
+<td align="left">.html</td>
+<td align="left">text&#x2F;html</td>
+<td align="left">.htt</td>
+<td align="left">text&#x2F;webviewhtml</td>
+</tr>
+<tr>
+<td align="left">.htx</td>
+<td align="left">text&#x2F;html</td>
+<td align="left">.icb</td>
+<td align="left">application&#x2F;x-icb</td>
+</tr>
+<tr>
+<td align="left">.ico</td>
+<td align="left">image&#x2F;x-icon</td>
+<td align="left">.ico</td>
+<td align="left">application&#x2F;x-ico</td>
+</tr>
+<tr>
+<td align="left">.iff</td>
+<td align="left">application&#x2F;x-iff</td>
+<td align="left">.ig4</td>
+<td align="left">application&#x2F;x-g4</td>
+</tr>
+<tr>
+<td align="left">.igs</td>
+<td align="left">application&#x2F;x-igs</td>
+<td align="left">.iii</td>
+<td align="left">application&#x2F;x-iphone</td>
+</tr>
+<tr>
+<td align="left">.img</td>
+<td align="left">application&#x2F;x-img</td>
+<td align="left">.ins</td>
+<td align="left">application&#x2F;x-internet-signup</td>
+</tr>
+<tr>
+<td align="left">.isp</td>
+<td align="left">application&#x2F;x-internet-signup</td>
+<td align="left">.IVF</td>
+<td align="left">video&#x2F;x-ivf</td>
+</tr>
+<tr>
+<td align="left">.java</td>
+<td align="left">java&#x2F;*</td>
+<td align="left">.jfif</td>
+<td align="left">image&#x2F;jpeg</td>
+</tr>
+<tr>
+<td align="left">.jpe</td>
+<td align="left">image&#x2F;jpeg</td>
+<td align="left">.jpe</td>
+<td align="left">application&#x2F;x-jpe</td>
+</tr>
+<tr>
+<td align="left">.jpeg</td>
+<td align="left">image&#x2F;jpeg</td>
+<td align="left">.jpg</td>
+<td align="left">image&#x2F;jpeg</td>
+</tr>
+<tr>
+<td align="left">.jpg</td>
+<td align="left">application&#x2F;x-jpg</td>
+<td align="left">.js</td>
+<td align="left">application&#x2F;x-javascript</td>
+</tr>
+<tr>
+<td align="left">.jsp</td>
+<td align="left">text&#x2F;html</td>
+<td align="left">.la1</td>
+<td align="left">audio&#x2F;x-liquid-file</td>
+</tr>
+<tr>
+<td align="left">.lar</td>
+<td align="left">application&#x2F;x-laplayer-reg</td>
+<td align="left">.latex</td>
+<td align="left">application&#x2F;x-latex</td>
+</tr>
+<tr>
+<td align="left">.lavs</td>
+<td align="left">audio&#x2F;x-liquid-secure</td>
+<td align="left">.lbm</td>
+<td align="left">application&#x2F;x-lbm</td>
+</tr>
+<tr>
+<td align="left">.lmsff</td>
+<td align="left">audio&#x2F;x-la-lms</td>
+<td align="left">.ls</td>
+<td align="left">application&#x2F;x-javascript</td>
+</tr>
+<tr>
+<td align="left">.ltr</td>
+<td align="left">application&#x2F;x-ltr</td>
+<td align="left">.m1v</td>
+<td align="left">video&#x2F;x-mpeg</td>
+</tr>
+<tr>
+<td align="left">.m2v</td>
+<td align="left">video&#x2F;x-mpeg</td>
+<td align="left">.m3u</td>
+<td align="left">audio&#x2F;mpegurl</td>
+</tr>
+<tr>
+<td align="left">.m4e</td>
+<td align="left">video&#x2F;mpeg4</td>
+<td align="left">.mac</td>
+<td align="left">application&#x2F;x-mac</td>
+</tr>
+<tr>
+<td align="left">.man</td>
+<td align="left">application&#x2F;x-troff-man</td>
+<td align="left">.math</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.mdb</td>
+<td align="left">application&#x2F;msaccess</td>
+<td align="left">.mdb</td>
+<td align="left">application&#x2F;x-mdb</td>
+</tr>
+<tr>
+<td align="left">.mfp</td>
+<td align="left">application&#x2F;x-shockwave-flash</td>
+<td align="left">.mht</td>
+<td align="left">message&#x2F;rfc822</td>
+</tr>
+<tr>
+<td align="left">.mhtml</td>
+<td align="left">message&#x2F;rfc822</td>
+<td align="left">.mi</td>
+<td align="left">application&#x2F;x-mi</td>
+</tr>
+<tr>
+<td align="left">.mid</td>
+<td align="left">audio&#x2F;mid</td>
+<td align="left">.midi</td>
+<td align="left">audio&#x2F;mid</td>
+</tr>
+<tr>
+<td align="left">.mil</td>
+<td align="left">application&#x2F;x-mil</td>
+<td align="left">.mml</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.mnd</td>
+<td align="left">audio&#x2F;x-musicnet-download</td>
+<td align="left">.mns</td>
+<td align="left">audio&#x2F;x-musicnet-stream</td>
+</tr>
+<tr>
+<td align="left">.mocha</td>
+<td align="left">application&#x2F;x-javascript</td>
+<td align="left">.movie</td>
+<td align="left">video&#x2F;x-sgi-movie</td>
+</tr>
+<tr>
+<td align="left">.mp1</td>
+<td align="left">audio&#x2F;mp1</td>
+<td align="left">.mp2</td>
+<td align="left">audio&#x2F;mp2</td>
+</tr>
+<tr>
+<td align="left">.mp2v</td>
+<td align="left">video&#x2F;mpeg</td>
+<td align="left">.mp3</td>
+<td align="left">audio&#x2F;mp3</td>
+</tr>
+<tr>
+<td align="left">.mp4</td>
+<td align="left">video&#x2F;mpeg4</td>
+<td align="left">.mpa</td>
+<td align="left">video&#x2F;x-mpg</td>
+</tr>
+<tr>
+<td align="left">.mpd</td>
+<td align="left">application&#x2F;vnd.ms-project</td>
+<td align="left">.mpe</td>
+<td align="left">video&#x2F;x-mpeg</td>
+</tr>
+<tr>
+<td align="left">.mpeg</td>
+<td align="left">video&#x2F;mpg</td>
+<td align="left">.mpg</td>
+<td align="left">video&#x2F;mpg</td>
+</tr>
+<tr>
+<td align="left">.mpga</td>
+<td align="left">audio&#x2F;rn-mpeg</td>
+<td align="left">.mpp</td>
+<td align="left">application&#x2F;vnd.ms-project</td>
+</tr>
+<tr>
+<td align="left">.mps</td>
+<td align="left">video&#x2F;x-mpeg</td>
+<td align="left">.mpt</td>
+<td align="left">application&#x2F;vnd.ms-project</td>
+</tr>
+<tr>
+<td align="left">.mpv</td>
+<td align="left">video&#x2F;mpg</td>
+<td align="left">.mpv2</td>
+<td align="left">video&#x2F;mpeg</td>
+</tr>
+<tr>
+<td align="left">.mpw</td>
+<td align="left">application&#x2F;vnd.ms-project</td>
+<td align="left">.mpx</td>
+<td align="left">application&#x2F;vnd.ms-project</td>
+</tr>
+<tr>
+<td align="left">.mtx</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.mxp</td>
+<td align="left">application&#x2F;x-mmxp</td>
+</tr>
+<tr>
+<td align="left">.net</td>
+<td align="left">image&#x2F;pnetvue</td>
+<td align="left">.nrf</td>
+<td align="left">application&#x2F;x-nrf</td>
+</tr>
+<tr>
+<td align="left">.nws</td>
+<td align="left">message&#x2F;rfc822</td>
+<td align="left">.odc</td>
+<td align="left">text&#x2F;x-ms-odc</td>
+</tr>
+<tr>
+<td align="left">.out</td>
+<td align="left">application&#x2F;x-out</td>
+<td align="left">.p10</td>
+<td align="left">application&#x2F;pkcs10</td>
+</tr>
+<tr>
+<td align="left">.p12</td>
+<td align="left">application&#x2F;x-pkcs12</td>
+<td align="left">.p7b</td>
+<td align="left">application&#x2F;x-pkcs7-certificates</td>
+</tr>
+<tr>
+<td align="left">.p7c</td>
+<td align="left">application&#x2F;pkcs7-mime</td>
+<td align="left">.p7m</td>
+<td align="left">application&#x2F;pkcs7-mime</td>
+</tr>
+<tr>
+<td align="left">.p7r</td>
+<td align="left">application&#x2F;x-pkcs7-certreqresp</td>
+<td align="left">.p7s</td>
+<td align="left">application&#x2F;pkcs7-signature</td>
+</tr>
+<tr>
+<td align="left">.pc5</td>
+<td align="left">application&#x2F;x-pc5</td>
+<td align="left">.pci</td>
+<td align="left">application&#x2F;x-pci</td>
+</tr>
+<tr>
+<td align="left">.pcl</td>
+<td align="left">application&#x2F;x-pcl</td>
+<td align="left">.pcx</td>
+<td align="left">application&#x2F;x-pcx</td>
+</tr>
+<tr>
+<td align="left">.pdf</td>
+<td align="left">application&#x2F;pdf</td>
+<td align="left">.pdf</td>
+<td align="left">application&#x2F;pdf</td>
+</tr>
+<tr>
+<td align="left">.pdx</td>
+<td align="left">application&#x2F;vnd.adobe.pdx</td>
+<td align="left">.pfx</td>
+<td align="left">application&#x2F;x-pkcs12</td>
+</tr>
+<tr>
+<td align="left">.pgl</td>
+<td align="left">application&#x2F;x-pgl</td>
+<td align="left">.pic</td>
+<td align="left">application&#x2F;x-pic</td>
+</tr>
+<tr>
+<td align="left">.pko</td>
+<td align="left">application&#x2F;vnd.ms-pki.pko</td>
+<td align="left">.pl</td>
+<td align="left">application&#x2F;x-perl</td>
+</tr>
+<tr>
+<td align="left">.plg</td>
+<td align="left">text&#x2F;html</td>
+<td align="left">.pls</td>
+<td align="left">audio&#x2F;scpls</td>
+</tr>
+<tr>
+<td align="left">.plt</td>
+<td align="left">application&#x2F;x-plt</td>
+<td align="left">.png</td>
+<td align="left">image&#x2F;png</td>
+</tr>
+<tr>
+<td align="left">.png</td>
+<td align="left">application&#x2F;x-png</td>
+<td align="left">.pot</td>
+<td align="left">application&#x2F;vnd.ms-powerpoint</td>
+</tr>
+<tr>
+<td align="left">.ppa</td>
+<td align="left">application&#x2F;vnd.ms-powerpoint</td>
+<td align="left">.ppm</td>
+<td align="left">application&#x2F;x-ppm</td>
+</tr>
+<tr>
+<td align="left">.pps</td>
+<td align="left">application&#x2F;vnd.ms-powerpoint</td>
+<td align="left">.ppt</td>
+<td align="left">application&#x2F;vnd.ms-powerpoint</td>
+</tr>
+<tr>
+<td align="left">.ppt</td>
+<td align="left">application&#x2F;x-ppt</td>
+<td align="left">.pr</td>
+<td align="left">application&#x2F;x-pr</td>
+</tr>
+<tr>
+<td align="left">.prf</td>
+<td align="left">application&#x2F;pics-rules</td>
+<td align="left">.prn</td>
+<td align="left">application&#x2F;x-prn</td>
+</tr>
+<tr>
+<td align="left">.prt</td>
+<td align="left">application&#x2F;x-prt</td>
+<td align="left">.ps</td>
+<td align="left">application&#x2F;x-ps</td>
+</tr>
+<tr>
+<td align="left">.ps</td>
+<td align="left">application&#x2F;postscript</td>
+<td align="left">.ptn</td>
+<td align="left">application&#x2F;x-ptn</td>
+</tr>
+<tr>
+<td align="left">.pwz</td>
+<td align="left">application&#x2F;vnd.ms-powerpoint</td>
+<td align="left">.r3t</td>
+<td align="left">text&#x2F;vnd.rn-realtext3d</td>
+</tr>
+<tr>
+<td align="left">.ra</td>
+<td align="left">audio&#x2F;vnd.rn-realaudio</td>
+<td align="left">.ram</td>
+<td align="left">audio&#x2F;x-pn-realaudio</td>
+</tr>
+<tr>
+<td align="left">.ras</td>
+<td align="left">application&#x2F;x-ras</td>
+<td align="left">.rat</td>
+<td align="left">application&#x2F;rat-file</td>
+</tr>
+<tr>
+<td align="left">.rdf</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.rec</td>
+<td align="left">application&#x2F;vnd.rn-recording</td>
+</tr>
+<tr>
+<td align="left">.red</td>
+<td align="left">application&#x2F;x-red</td>
+<td align="left">.rgb</td>
+<td align="left">application&#x2F;x-rgb</td>
+</tr>
+<tr>
+<td align="left">.rjs</td>
+<td align="left">application&#x2F;vnd.rn-realsystem-rjs</td>
+<td align="left">.rjt</td>
+<td align="left">application&#x2F;vnd.rn-realsystem-rjt</td>
+</tr>
+<tr>
+<td align="left">.rlc</td>
+<td align="left">application&#x2F;x-rlc</td>
+<td align="left">.rle</td>
+<td align="left">application&#x2F;x-rle</td>
+</tr>
+<tr>
+<td align="left">.rm</td>
+<td align="left">application&#x2F;vnd.rn-realmedia</td>
+<td align="left">.rmf</td>
+<td align="left">application&#x2F;vnd.adobe.rmf</td>
+</tr>
+<tr>
+<td align="left">.rmi</td>
+<td align="left">audio&#x2F;mid</td>
+<td align="left">.rmj</td>
+<td align="left">application&#x2F;vnd.rn-realsystem-rmj</td>
+</tr>
+<tr>
+<td align="left">.rmm</td>
+<td align="left">audio&#x2F;x-pn-realaudio</td>
+<td align="left">.rmp</td>
+<td align="left">application&#x2F;vnd.rn-rn_music_package</td>
+</tr>
+<tr>
+<td align="left">.rms</td>
+<td align="left">application&#x2F;vnd.rn-realmedia-secure</td>
+<td align="left">.rmvb</td>
+<td align="left">application&#x2F;vnd.rn-realmedia-vbr</td>
+</tr>
+<tr>
+<td align="left">.rmx</td>
+<td align="left">application&#x2F;vnd.rn-realsystem-rmx</td>
+<td align="left">.rnx</td>
+<td align="left">application&#x2F;vnd.rn-realplayer</td>
+</tr>
+<tr>
+<td align="left">.rp</td>
+<td align="left">image&#x2F;vnd.rn-realpix</td>
+<td align="left">.rpm</td>
+<td align="left">audio&#x2F;x-pn-realaudio-plugin</td>
+</tr>
+<tr>
+<td align="left">.rsml</td>
+<td align="left">application&#x2F;vnd.rn-rsml</td>
+<td align="left">.rt</td>
+<td align="left">text&#x2F;vnd.rn-realtext</td>
+</tr>
+<tr>
+<td align="left">.rtf</td>
+<td align="left">application&#x2F;msword</td>
+<td align="left">.rtf</td>
+<td align="left">application&#x2F;x-rtf</td>
+</tr>
+<tr>
+<td align="left">.rv</td>
+<td align="left">video&#x2F;vnd.rn-realvideo</td>
+<td align="left">.sam</td>
+<td align="left">application&#x2F;x-sam</td>
+</tr>
+<tr>
+<td align="left">.sat</td>
+<td align="left">application&#x2F;x-sat</td>
+<td align="left">.sdp</td>
+<td align="left">application&#x2F;sdp</td>
+</tr>
+<tr>
+<td align="left">.sdw</td>
+<td align="left">application&#x2F;x-sdw</td>
+<td align="left">.sit</td>
+<td align="left">application&#x2F;x-stuffit</td>
+</tr>
+<tr>
+<td align="left">.slb</td>
+<td align="left">application&#x2F;x-slb</td>
+<td align="left">.sld</td>
+<td align="left">application&#x2F;x-sld</td>
+</tr>
+<tr>
+<td align="left">.slk</td>
+<td align="left">drawing&#x2F;x-slk</td>
+<td align="left">.smi</td>
+<td align="left">application&#x2F;smil</td>
+</tr>
+<tr>
+<td align="left">.smil</td>
+<td align="left">application&#x2F;smil</td>
+<td align="left">.smk</td>
+<td align="left">application&#x2F;x-smk</td>
+</tr>
+<tr>
+<td align="left">.snd</td>
+<td align="left">audio&#x2F;basic</td>
+<td align="left">.sol</td>
+<td align="left">text&#x2F;plain</td>
+</tr>
+<tr>
+<td align="left">.sor</td>
+<td align="left">text&#x2F;plain</td>
+<td align="left">.spc</td>
+<td align="left">application&#x2F;x-pkcs7-certificates</td>
+</tr>
+<tr>
+<td align="left">.spl</td>
+<td align="left">application&#x2F;futuresplash</td>
+<td align="left">.spp</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.ssm</td>
+<td align="left">application&#x2F;streamingmedia</td>
+<td align="left">.sst</td>
+<td align="left">application&#x2F;vnd.ms-pki.certstore</td>
+</tr>
+<tr>
+<td align="left">.stl</td>
+<td align="left">application&#x2F;vnd.ms-pki.stl</td>
+<td align="left">.stm</td>
+<td align="left">text&#x2F;html</td>
+</tr>
+<tr>
+<td align="left">.sty</td>
+<td align="left">application&#x2F;x-sty</td>
+<td align="left">.svg</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.swf</td>
+<td align="left">application&#x2F;x-shockwave-flash</td>
+<td align="left">.tdf</td>
+<td align="left">application&#x2F;x-tdf</td>
+</tr>
+<tr>
+<td align="left">.tg4</td>
+<td align="left">application&#x2F;x-tg4</td>
+<td align="left">.tga</td>
+<td align="left">application&#x2F;x-tga</td>
+</tr>
+<tr>
+<td align="left">.tif</td>
+<td align="left">image&#x2F;tiff</td>
+<td align="left">.tif</td>
+<td align="left">application&#x2F;x-tif</td>
+</tr>
+<tr>
+<td align="left">.tiff</td>
+<td align="left">image&#x2F;tiff</td>
+<td align="left">.tld</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.top</td>
+<td align="left">drawing&#x2F;x-top</td>
+<td align="left">.torrent</td>
+<td align="left">application&#x2F;x-bittorrent</td>
+</tr>
+<tr>
+<td align="left">.tsd</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.txt</td>
+<td align="left">text&#x2F;plain</td>
+</tr>
+<tr>
+<td align="left">.uin</td>
+<td align="left">application&#x2F;x-icq</td>
+<td align="left">.uls</td>
+<td align="left">text&#x2F;iuls</td>
+</tr>
+<tr>
+<td align="left">.vcf</td>
+<td align="left">text&#x2F;x-vcard</td>
+<td align="left">.vda</td>
+<td align="left">application&#x2F;x-vda</td>
+</tr>
+<tr>
+<td align="left">.vdx</td>
+<td align="left">application&#x2F;vnd.visio</td>
+<td align="left">.vml</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.vpg</td>
+<td align="left">application&#x2F;x-vpeg005</td>
+<td align="left">.vsd</td>
+<td align="left">application&#x2F;vnd.visio</td>
+</tr>
+<tr>
+<td align="left">.vsd</td>
+<td align="left">application&#x2F;x-vsd</td>
+<td align="left">.vss</td>
+<td align="left">application&#x2F;vnd.visio</td>
+</tr>
+<tr>
+<td align="left">.vst</td>
+<td align="left">application&#x2F;vnd.visio</td>
+<td align="left">.vst</td>
+<td align="left">application&#x2F;x-vst</td>
+</tr>
+<tr>
+<td align="left">.vsw</td>
+<td align="left">application&#x2F;vnd.visio</td>
+<td align="left">.vsx</td>
+<td align="left">application&#x2F;vnd.visio</td>
+</tr>
+<tr>
+<td align="left">.vtx</td>
+<td align="left">application&#x2F;vnd.visio</td>
+<td align="left">.vxml</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.wav</td>
+<td align="left">audio&#x2F;wav</td>
+<td align="left">.wax</td>
+<td align="left">audio&#x2F;x-ms-wax</td>
+</tr>
+<tr>
+<td align="left">.wb1</td>
+<td align="left">application&#x2F;x-wb1</td>
+<td align="left">.wb2</td>
+<td align="left">application&#x2F;x-wb2</td>
+</tr>
+<tr>
+<td align="left">.wb3</td>
+<td align="left">application&#x2F;x-wb3</td>
+<td align="left">.wbmp</td>
+<td align="left">image&#x2F;vnd.wap.wbmp</td>
+</tr>
+<tr>
+<td align="left">.wiz</td>
+<td align="left">application&#x2F;msword</td>
+<td align="left">.wk3</td>
+<td align="left">application&#x2F;x-wk3</td>
+</tr>
+<tr>
+<td align="left">.wk4</td>
+<td align="left">application&#x2F;x-wk4</td>
+<td align="left">.wkq</td>
+<td align="left">application&#x2F;x-wkq</td>
+</tr>
+<tr>
+<td align="left">.wks</td>
+<td align="left">application&#x2F;x-wks</td>
+<td align="left">.wm</td>
+<td align="left">video&#x2F;x-ms-wm</td>
+</tr>
+<tr>
+<td align="left">.wma</td>
+<td align="left">audio&#x2F;x-ms-wma</td>
+<td align="left">.wmd</td>
+<td align="left">application&#x2F;x-ms-wmd</td>
+</tr>
+<tr>
+<td align="left">.wmf</td>
+<td align="left">application&#x2F;x-wmf</td>
+<td align="left">.wml</td>
+<td align="left">text&#x2F;vnd.wap.wml</td>
+</tr>
+<tr>
+<td align="left">.wmv</td>
+<td align="left">video&#x2F;x-ms-wmv</td>
+<td align="left">.wmx</td>
+<td align="left">video&#x2F;x-ms-wmx</td>
+</tr>
+<tr>
+<td align="left">.wmz</td>
+<td align="left">application&#x2F;x-ms-wmz</td>
+<td align="left">.wp6</td>
+<td align="left">application&#x2F;x-wp6</td>
+</tr>
+<tr>
+<td align="left">.wpd</td>
+<td align="left">application&#x2F;x-wpd</td>
+<td align="left">.wpg</td>
+<td align="left">application&#x2F;x-wpg</td>
+</tr>
+<tr>
+<td align="left">.wpl</td>
+<td align="left">application&#x2F;vnd.ms-wpl</td>
+<td align="left">.wq1</td>
+<td align="left">application&#x2F;x-wq1</td>
+</tr>
+<tr>
+<td align="left">.wr1</td>
+<td align="left">application&#x2F;x-wr1</td>
+<td align="left">.wri</td>
+<td align="left">application&#x2F;x-wri</td>
+</tr>
+<tr>
+<td align="left">.wrk</td>
+<td align="left">application&#x2F;x-wrk</td>
+<td align="left">.ws</td>
+<td align="left">application&#x2F;x-ws</td>
+</tr>
+<tr>
+<td align="left">.ws2</td>
+<td align="left">application&#x2F;x-ws</td>
+<td align="left">.wsc</td>
+<td align="left">text&#x2F;scriptlet</td>
+</tr>
+<tr>
+<td align="left">.wsdl</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.wvx</td>
+<td align="left">video&#x2F;x-ms-wvx</td>
+</tr>
+<tr>
+<td align="left">.xdp</td>
+<td align="left">application&#x2F;vnd.adobe.xdp</td>
+<td align="left">.xdr</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.xfd</td>
+<td align="left">application&#x2F;vnd.adobe.xfd</td>
+<td align="left">.xfdf</td>
+<td align="left">application&#x2F;vnd.adobe.xfdf</td>
+</tr>
+<tr>
+<td align="left">.xhtml</td>
+<td align="left">text&#x2F;html</td>
+<td align="left">.xls</td>
+<td align="left">application&#x2F;vnd.ms-excel</td>
+</tr>
+<tr>
+<td align="left">.xls</td>
+<td align="left">application&#x2F;x-xls</td>
+<td align="left">.xlw</td>
+<td align="left">application&#x2F;x-xlw</td>
+</tr>
+<tr>
+<td align="left">.xml</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.xpl</td>
+<td align="left">audio&#x2F;scpls</td>
+</tr>
+<tr>
+<td align="left">.xq</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.xql</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.xquery</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.xsd</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.xsl</td>
+<td align="left">text&#x2F;xml</td>
+<td align="left">.xslt</td>
+<td align="left">text&#x2F;xml</td>
+</tr>
+<tr>
+<td align="left">.xwd</td>
+<td align="left">application&#x2F;x-xwd</td>
+<td align="left">.x_b</td>
+<td align="left">application&#x2F;x-x_b</td>
+</tr>
+<tr>
+<td align="left">.sis</td>
+<td align="left">application&#x2F;vnd.symbian.install</td>
+<td align="left">.sisx</td>
+<td align="left">application&#x2F;vnd.symbian.install</td>
+</tr>
+<tr>
+<td align="left">.x_t</td>
+<td align="left">application&#x2F;x-x_t</td>
+<td align="left">.ipa</td>
+<td align="left">application&#x2F;vnd.iphone</td>
+</tr>
+<tr>
+<td align="left">.apk</td>
+<td align="left">application&#x2F;vnd.android.package-archive</td>
+<td align="left">.xap</td>
+<td align="left">application&#x2F;x-silverlight-app</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Learning</category>
+      </categories>
+      <tags>
+        <tag>Snippets</tag>
+      </tags>
+  </entry>
 </search>
